@@ -4,6 +4,19 @@ import { roundDisplay, toYmd } from '@/lib/format'
 import { findAttendanceCell } from '@/lib/attendanceLookup'
 import type { Attendance, Employee } from '@/types'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { cn } from '@/lib/utils'
+import {
+  numNeutral,
+  tableBaseClass,
+  tableCellLast,
+  tableHeadCell,
+  tableHeadSticky,
+  tableRowCell,
+  tableRowGroup,
+  tableShellClass,
+  tableTotalCell,
+  tableTotalRow,
+} from '@/lib/tableUi'
 
 type ReportTableProps = {
   weekStart: Date
@@ -55,65 +68,107 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5" dir="rtl">
         <div className="rounded-2xl border border-[var(--color-border)] bg-app-card p-5 text-right shadow-sm sm:p-6">
           <p className="text-sm text-[var(--color-text-secondary)]">إجمالي الرواتب</p>
-          <p className="mt-2 text-center font-mono-nums text-xl font-bold text-[var(--color-success)]">
+          <p className="mt-2 text-center font-mono-nums text-xl font-semibold text-slate-800">
             د.أ {roundDisplay(summary.total)}
           </p>
         </div>
         <div className="rounded-2xl border border-[var(--color-border)] bg-app-card p-5 text-right shadow-sm sm:p-6">
           <p className="text-sm text-[var(--color-text-secondary)]">أيام الدوام</p>
-          <p className="mt-2 text-center font-mono-nums text-xl font-bold text-[var(--color-accent-blue)]">
+          <p className="mt-2 text-center font-mono-nums text-xl font-semibold text-slate-800">
             {summary.days}
           </p>
         </div>
         <div className="rounded-2xl border border-[var(--color-border)] bg-app-card p-5 text-right shadow-sm sm:p-6">
           <p className="text-sm text-[var(--color-text-secondary)]">متوسط اليومي</p>
-          <p className="mt-2 text-center font-mono-nums text-xl font-bold text-[var(--color-accent-blue)]">
+          <p className="mt-2 text-center font-mono-nums text-xl font-semibold text-slate-800">
             د.أ {roundDisplay(summary.avg)}
           </p>
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-app-card shadow-sm">
-        <table className="w-full table-fixed border-collapse text-sm" dir="rtl">
+      <div className={cn(tableShellClass, 'overflow-hidden')}>
+        <table className={cn(tableBaseClass, 'min-w-[1040px]')} dir="rtl">
           <thead>
-            <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)]">
-              <th className="p-3.5 text-right text-xs font-semibold text-[var(--color-text-primary)] sm:p-4">
+            <tr>
+              <th
+                className={cn(
+                  tableHeadCell,
+                  tableHeadSticky,
+                  'sticky start-0 z-30 min-w-[10rem] text-right shadow-[1px_0_0_rgb(203,213,225)]'
+                )}
+              >
                 الموظف
               </th>
               {WEEK_ORDER.map((l) => (
-                <th key={l} className="p-2 text-center text-[11px] font-semibold leading-tight text-[var(--color-text-primary)]">
+                <th
+                  key={l}
+                  className={cn(
+                    tableHeadCell,
+                    tableHeadSticky,
+                    'z-20 max-w-[4.5rem] px-2 py-3 text-center text-[11px] font-bold leading-snug whitespace-normal sm:text-xs'
+                  )}
+                >
                   {l}
                 </th>
               ))}
-              <th className="p-3 text-center text-xs font-semibold text-[var(--color-success)]">المجموع</th>
+              <th
+                className={cn(tableHeadCell, tableHeadSticky, tableCellLast, 'z-20 min-w-[5rem] text-center')}
+              >
+                المجموع
+              </th>
             </tr>
           </thead>
           <tbody>
-            {perEmployee.map(({ employee: e, rows, sum }, idx) => (
-              <tr
-                key={e.id}
-                className={
-                  idx % 2 === 0
-                    ? 'border-b border-[var(--color-border)]/50 bg-[var(--color-bg-elevated)]/15'
-                    : 'border-b border-[var(--color-border)]/50'
-                }
-              >
-                <td className="p-3 text-right align-middle font-semibold text-[var(--color-text-primary)]">
-                  {e.name}{' '}
-                  <span className="font-mono-nums text-[var(--color-accent-blue)]">({e.employee_id})</span>
-                </td>
-                {rows.map(({ label, wage }) => (
-                  <td key={label} className="p-2 text-center align-middle font-mono-nums text-xs">
-                    {wage != null ? roundDisplay(wage) : '—'}
+            {perEmployee.map(({ employee: e, rows, sum }, idx) => {
+              const zebra = idx % 2 === 0
+              return (
+                <tr key={e.id} className={tableRowGroup}>
+                  <td
+                    className={cn(
+                      tableRowCell(zebra),
+                      'sticky start-0 z-10 border-e-2 border-e-slate-300 text-right text-sm font-semibold sm:text-base'
+                    )}
+                  >
+                    <span className="leading-snug">{e.name}</span>{' '}
+                    <span className="mt-0.5 block font-mono-nums text-xs font-normal text-slate-500 sm:mt-0 sm:inline sm:text-sm">
+                      ({e.employee_id})
+                    </span>
                   </td>
-                ))}
-                <td className="p-3 text-center align-middle font-mono-nums font-bold text-[var(--color-success)]">
-                  {roundDisplay(sum)}
-                </td>
-              </tr>
-            ))}
-            <tr className="border-t border-[var(--color-border)] bg-[var(--color-success-bg)]/40 font-bold text-[var(--color-text-primary)]">
-              <td className="p-3.5 text-right sm:p-4">المجموع الكلي</td>
+                  {rows.map(({ label, wage }) => (
+                    <td
+                      key={label}
+                      className={cn(
+                        tableRowCell(zebra),
+                        'text-center font-mono-nums text-sm font-semibold sm:text-[15px]'
+                      )}
+                    >
+                      {wage != null ? (
+                        <span className={numNeutral}>{roundDisplay(wage)}</span>
+                      ) : (
+                        <span className="text-slate-400">—</span>
+                      )}
+                    </td>
+                  ))}
+                  <td
+                    className={cn(
+                      tableRowCell(zebra),
+                      tableCellLast,
+                      'text-center font-mono-nums text-sm font-bold text-slate-900 sm:text-base'
+                    )}
+                  >
+                    {roundDisplay(sum)}
+                  </td>
+                </tr>
+              )
+            })}
+            <tr className={tableTotalRow}>
+              <td
+                className={cn(
+                  tableTotalCell('sticky start-0 z-10 border-e-2 border-e-slate-400/60 py-4 text-right text-base')
+                )}
+              >
+                المجموع الكلي
+              </td>
               {WEEK_ORDER.map((label) => {
                 const d = getRowDateForWeekRow(weekStart, label)
                 const ds = toYmd(d)
@@ -123,12 +178,22 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
                   if (att?.daily_wage != null) daySum += att.daily_wage
                 }
                 return (
-                  <td key={label} className="p-2 text-center align-middle font-mono-nums text-xs">
+                  <td
+                    key={label}
+                    className={cn(
+                      tableTotalCell('text-center font-mono-nums text-sm sm:text-[15px]')
+                    )}
+                  >
                     {roundDisplay(daySum)}
                   </td>
                 )
               })}
-              <td className="p-3 text-center align-middle font-mono-nums text-[var(--color-success)]">
+              <td
+                className={cn(
+                  tableTotalCell('text-center font-mono-nums text-base'),
+                  tableCellLast
+                )}
+              >
                 {roundDisplay(summary.total)}
               </td>
             </tr>

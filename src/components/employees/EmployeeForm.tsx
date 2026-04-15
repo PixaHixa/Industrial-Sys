@@ -145,13 +145,13 @@ export function EmployeeForm({ editing, existingIds, onDone }: EmployeeFormProps
           <p className="mb-2 text-sm font-semibold text-[var(--color-text-muted)]">حساب تلقائي</p>
           <p className="text-[var(--color-text-primary)]">
             الراتب اليومي (8 ساعات):{' '}
-            <span className="font-mono-nums font-bold text-[var(--color-success)]">
+            <span className="font-mono-nums font-bold text-slate-800">
               {roundDisplay(preview.daily)}
             </span>
           </p>
           <p className="mt-1 text-[var(--color-text-primary)]">
             الراتب الأسبوعي (6 أيام):{' '}
-            <span className="font-mono-nums font-bold text-[var(--color-success)]">
+            <span className="font-mono-nums font-bold text-slate-800">
               {roundDisplay(preview.weekly)}
             </span>
           </p>

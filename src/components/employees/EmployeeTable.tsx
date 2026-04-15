@@ -3,6 +3,17 @@ import type { Employee } from '@/types'
 import { Button } from '@/components/ui/Button'
 import { Pencil, Trash2 } from 'lucide-react'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { cn } from '@/lib/utils'
+import {
+  numNeutral,
+  tableBaseClass,
+  tableCellLast,
+  tableHeadCell,
+  tableHeadSticky,
+  tableRowCell,
+  tableRowGroup,
+  tableShellClass,
+} from '@/lib/tableUi'
 
 type EmployeeTableProps = {
   employees: Employee[]
@@ -31,59 +42,69 @@ export function EmployeeTable({ employees, loading, onEdit, onDeleteRequest }: E
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-app-card shadow-sm">
-      <table className="w-full table-fixed border-collapse text-sm" dir="rtl">
+    <div className={cn(tableShellClass, 'overflow-hidden')}>
+      <table className={cn(tableBaseClass, 'table-fixed')} dir="rtl">
         <thead>
-          <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg-elevated)]/55 text-xs font-semibold text-[var(--color-text-secondary)]">
-            <th className="w-[9%] px-2 py-3.5 text-center font-mono-nums">المعرف</th>
-            <th className="w-[22%] px-3 py-3.5 text-right">الاسم</th>
-            <th className="w-[13%] px-2 py-3.5 text-center font-mono-nums">سعر الساعة</th>
-            <th className="w-[13%] px-2 py-3.5 text-center font-mono-nums">المواصلات</th>
-            <th className="w-[13%] px-2 py-3.5 text-center font-mono-nums">اليومية</th>
-            <th className="w-[13%] px-2 py-3.5 text-center font-mono-nums">الأسبوعية</th>
-            <th className="w-[17%] px-2 py-3.5 text-center">إجراءات</th>
+          <tr>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[9%] px-2 text-center font-mono-nums')}>
+              المعرف
+            </th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[22%] text-right')}>الاسم</th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+              سعر الساعة
+            </th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+              المواصلات
+            </th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+              اليومية
+            </th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+              الأسبوعية
+            </th>
+            <th
+              className={cn(tableHeadCell, tableHeadSticky, tableCellLast, 'z-20 w-[17%] text-center')}
+            >
+              إجراءات
+            </th>
           </tr>
         </thead>
         <tbody>
-          {employees.map((e, idx) => (
-            <tr
-              key={e.id}
-              className={
-                idx % 2 === 0
-                  ? 'border-b border-[var(--color-border)]/40 bg-[var(--color-bg-elevated)]/12'
-                  : 'border-b border-[var(--color-border)]/40'
-              }
-            >
-              <td className="px-2 py-3.5 text-center align-middle font-mono-nums font-semibold text-[var(--color-accent-blue)]">
-                {e.employee_id}
-              </td>
-              <td className="px-3 py-3.5 text-right align-middle font-medium text-[var(--color-text-primary)]">
-                {e.name}
-              </td>
-              <td className="px-2 py-3.5 text-center align-middle font-mono-nums text-[var(--color-text-primary)]">
-                {roundDisplay(e.hourly_rate)}
-              </td>
-              <td className="px-2 py-3.5 text-center align-middle font-mono-nums text-[var(--color-text-primary)]">
-                {roundDisplay(e.transport_allowance)}
-              </td>
-              <td className="px-2 py-3.5 text-center align-middle font-mono-nums text-[var(--color-success)]">
-                {roundDisplay(e.hourly_rate * 8)}
-              </td>
-              <td className="px-2 py-3.5 text-center align-middle font-mono-nums text-[var(--color-success)]">
-                {roundDisplay(e.hourly_rate * 8 * 6)}
-              </td>
-              <td className="px-2 py-3.5 text-center align-middle">
-                <div className="flex flex-wrap items-center justify-center gap-2">
-                  <Button size="sm" variant="secondary" onClick={() => onEdit(e)}>
-                    <Pencil className="h-4 w-4" /> تعديل
-                  </Button>
-                  <Button size="sm" variant="danger" onClick={() => onDeleteRequest(e)}>
-                    <Trash2 className="h-4 w-4" /> حذف
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
+          {employees.map((e, idx) => {
+            const zebra = idx % 2 === 0
+            return (
+              <tr key={e.id} className={tableRowGroup}>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm text-slate-700')}>
+                  {e.employee_id}
+                </td>
+                <td className={cn(tableRowCell(zebra), 'text-right text-sm font-semibold text-slate-900')}>
+                  {e.name}
+                </td>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm text-slate-800')}>
+                  {roundDisplay(e.hourly_rate)}
+                </td>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm text-slate-800')}>
+                  {roundDisplay(e.transport_allowance)}
+                </td>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm')}>
+                  <span className={numNeutral}>{roundDisplay(e.hourly_rate * 8)}</span>
+                </td>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm')}>
+                  <span className={numNeutral}>{roundDisplay(e.hourly_rate * 8 * 6)}</span>
+                </td>
+                <td className={cn(tableRowCell(zebra), tableCellLast, 'text-center')}>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    <Button size="sm" variant="secondary" onClick={() => onEdit(e)}>
+                      <Pencil className="h-4 w-4" /> تعديل
+                    </Button>
+                    <Button size="sm" variant="danger" onClick={() => onDeleteRequest(e)}>
+                      <Trash2 className="h-4 w-4" /> حذف
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>

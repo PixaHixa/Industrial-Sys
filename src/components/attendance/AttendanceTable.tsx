@@ -7,6 +7,17 @@ import type { Attendance, Employee } from '@/types'
 import { cn } from '@/lib/utils'
 import { formatTime12From24 } from '@/lib/timeFormat'
 import { findAttendanceCell } from '@/lib/attendanceLookup'
+import { useFridayAttendance } from '@/contexts/FridayAttendanceContext'
+import {
+  numNeutral,
+  tableBaseClass,
+  tableCellLast,
+  tableHeadCell,
+  tableHeadSticky,
+  tableRowCell,
+  tableRowGroup,
+  tableShellClass,
+} from '@/lib/tableUi'
 
 type AttendanceTableProps = {
   employee: Employee
@@ -25,18 +36,27 @@ export function AttendanceTable({
   onEdit,
   onDeleteRow,
 }: AttendanceTableProps) {
+  const { fridayAttendanceEnabled } = useFridayAttendance()
   const wsStr = toYmd(weekStart)
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-[var(--color-border)] bg-app-card shadow-sm">
-      <table className="w-full min-w-[640px] border-collapse text-sm" dir="rtl">
+    <div className={tableShellClass}>
+      <table className={cn(tableBaseClass, 'min-w-[680px]')} dir="rtl">
         <thead>
-          <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)]">
-            <th className="p-4 text-right font-semibold text-[var(--color-text-primary)]">اليوم</th>
-            <th className="p-4 text-center font-semibold font-mono-nums text-[var(--color-text-primary)]">التاريخ</th>
-            <th className="p-4 text-right font-semibold text-[var(--color-text-primary)]">الدوام</th>
-            <th className="p-4 text-center font-semibold font-mono-nums text-[var(--color-text-primary)]">الراتب</th>
-            <th className="p-4 text-center font-semibold text-[var(--color-text-primary)]">إجراءات</th>
+          <tr>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 min-w-[7rem] text-right')}>اليوم</th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+              التاريخ
+            </th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 min-w-[11rem] text-right')}>
+              الدوام
+            </th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+              الراتب
+            </th>
+            <th className={cn(tableHeadCell, tableHeadSticky, tableCellLast, 'z-20 text-center')}>
+              إجراءات
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -46,69 +66,65 @@ export function AttendanceTable({
             const att = findAttendanceCell(rows, _employee.id, wsStr, rowLabel, rowDateStr)
             const isFriday = rowLabel === 'الجمعة'
             const isWedNight = rowLabel === 'سهرة الأربعاء'
-            const absent = !att && !isFriday && !isWedNight
-
-            const rowBg = isWedNight
-              ? 'bg-[var(--color-gold-bg)]/45'
-              : isFriday
-                ? 'bg-[var(--color-purple-bg)]/55'
-                : idx % 2 === 0
-                  ? 'bg-[var(--color-bg-base)]'
-                  : 'bg-transparent'
+            const absent = !att && !isWedNight && (!isFriday || fridayAttendanceEnabled)
+            const zebra = idx % 2 === 0
 
             return (
-              <tr
-                key={rowLabel}
-                className={cn(
-                  'border-b border-[var(--color-border)]/80 transition-colors hover:bg-[var(--color-bg-surface)]/40',
-                  rowBg
-                )}
-              >
-                <td className="p-4 text-right align-middle font-semibold">
-                  <span
-                    className={cn(
-                      isWedNight && 'text-[var(--color-gold)]',
-                      isFriday && 'text-[var(--color-purple)]'
-                    )}
-                  >
-                    {rowLabel}
-                    {isWedNight ? <Star className="ms-1 inline h-4 w-4 text-[var(--color-gold)]" /> : null}
-                  </span>
+              <tr key={rowLabel} className={tableRowGroup}>
+                <td
+                  className={cn(
+                    tableRowCell(zebra),
+                    'text-right text-sm font-semibold sm:text-[15px]',
+                    isWedNight && 'text-amber-900',
+                    isFriday && 'text-indigo-900'
+                  )}
+                >
+                  {rowLabel}
+                  {isWedNight ? <Star className="ms-1 inline h-4 w-4 text-amber-600" /> : null}
                 </td>
-                <td className="p-4 text-center align-middle font-mono-nums text-[var(--color-accent-blue)]">
+                <td
+                  className={cn(
+                    tableRowCell(zebra),
+                    'text-center font-mono-nums text-sm text-slate-600 sm:text-[15px]'
+                  )}
+                >
                   {formatDateEn(rowDate)}
                 </td>
-                <td className="p-4 text-right align-middle">
+                <td className={cn(tableRowCell(zebra), 'text-right text-sm sm:text-[15px]')}>
                   {att?.is_carried_over ? (
                     <div className="flex flex-wrap items-center justify-end gap-2">
-                      <Badge className="border border-[var(--color-gold-bg)] bg-[var(--color-gold-bg)] text-[var(--color-gold)]">
+                      <Badge className="border border-amber-200/80 bg-amber-50 text-amber-900">
                         مُرحّل
                       </Badge>
-                      <span className="text-[var(--color-text-muted)]">—</span>
+                      <span className="text-slate-400">—</span>
                     </div>
                   ) : att ? (
                     <span
                       dir="rtl"
-                      className="inline-flex items-center justify-center gap-2 font-mono-nums text-[var(--color-text-primary)]"
+                      className="inline-flex items-center justify-center gap-2 font-mono-nums text-slate-900"
                     >
                       <span dir="ltr">{formatTime12From24(att.check_in)}</span>
-                      <span className="text-[var(--color-text-muted)]" dir="ltr">
+                      <span className="text-slate-400" dir="ltr">
                         —
                       </span>
                       <span dir="ltr">{formatTime12From24(att.check_out)}</span>
                     </span>
                   ) : absent ? (
-                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-danger-bg)] bg-[var(--color-danger-bg)] px-2.5 py-1 text-sm font-semibold text-[var(--color-danger)]">
+                    <span className="inline-flex items-center gap-1.5 rounded-md bg-red-50 px-2.5 py-1 text-sm font-semibold text-red-900 ring-1 ring-inset ring-red-100">
                       <X className="h-4 w-4 shrink-0" /> غياب
                     </span>
                   ) : (
-                    <span className="text-[var(--color-text-muted)]">—</span>
+                    <span className="text-slate-400">—</span>
                   )}
                 </td>
-                <td className="p-4 text-center align-middle font-mono-nums font-bold text-[var(--color-success)]">
-                  {att && att.daily_wage != null ? `د.أ ${roundDisplay(att.daily_wage)}` : '—'}
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm sm:text-[15px]')}>
+                  {att && att.daily_wage != null ? (
+                    <span className={numNeutral}>د.أ {roundDisplay(att.daily_wage)}</span>
+                  ) : (
+                    <span className="text-slate-400">—</span>
+                  )}
                 </td>
-                <td className="p-4 text-center align-middle">
+                <td className={cn(tableRowCell(zebra), tableCellLast, 'text-center')}>
                   <div className="flex flex-wrap justify-center gap-2">
                     {att ? (
                       <>
@@ -135,7 +151,7 @@ export function AttendanceTable({
                           </Button>
                         )}
                       </>
-                    ) : isWedNight || isFriday ? null : (
+                    ) : isWedNight ? null : isFriday && !fridayAttendanceEnabled ? null : (
                       <Button size="sm" variant="primary" onClick={() => onAdd(rowLabel, rowDate)}>
                         <Plus className="h-4 w-4" /> إضافة
                       </Button>

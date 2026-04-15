@@ -148,7 +148,7 @@ export function AttendanceModal({
           </p>
           <p className="text-[var(--color-text-primary)]">
             الراتب اليومي:{' '}
-            <span className="font-mono-nums font-bold text-[var(--color-success)]">
+            <span className="font-mono-nums font-bold text-slate-800">
               د.أ {roundDisplay(preview.wage)}
             </span>
           </p>

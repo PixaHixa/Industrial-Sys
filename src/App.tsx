@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { FridayAttendanceProvider } from '@/contexts/FridayAttendanceContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 import { ConfigBanner } from '@/components/ConfigBanner'
 import { Dashboard } from '@/pages/Dashboard'
@@ -15,16 +16,18 @@ function routerBasename() {
 export default function App() {
   return (
     <BrowserRouter basename={routerBasename()}>
-      <ToastProvider>
-        <ConfigBanner />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/attendance" element={<AttendancePage />} />
-          <Route path="/employees" element={<EmployeesPage />} />
-          <Route path="/reports" element={<ReportsPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </ToastProvider>
+      <FridayAttendanceProvider>
+        <ToastProvider>
+          <ConfigBanner />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/attendance" element={<AttendancePage />} />
+            <Route path="/employees" element={<EmployeesPage />} />
+            <Route path="/reports" element={<ReportsPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </ToastProvider>
+      </FridayAttendanceProvider>
     </BrowserRouter>
   )
 }

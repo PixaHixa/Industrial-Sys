@@ -14,9 +14,12 @@ import { formatDateEn, toYmd } from '@/lib/format'
 import type { WeekDayLabel } from '@/lib/weekUtils'
 import { Trash2 } from 'lucide-react'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { useFridayAttendance } from '@/contexts/FridayAttendanceContext'
+import { cn } from '@/lib/utils'
 
 export function AttendancePage() {
   const toast = useToast()
+  const { fridayAttendanceEnabled, setFridayAttendanceEnabled } = useFridayAttendance()
   const [weekRef, setWeekRef] = useState(() => getWeekStart(new Date()))
   const [employees, setEmployees] = useState<Employee[]>([])
   const [empId, setEmpId] = useState<string>('')
@@ -146,6 +149,42 @@ export function AttendancePage() {
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="mb-6 rounded-xl border border-slate-200 bg-white px-4 py-4 text-right shadow-sm sm:px-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-slate-900">دوام يوم الجمعة (لجميع الموظفين)</p>
+            <p className="mt-1 text-sm text-slate-600">
+              <strong className="text-slate-800">إيقاف:</strong> لا زر «إضافة» للجمعة ولا يُحسب غياب يوم الجمعة.
+              <span className="mx-1">—</span>
+              <strong className="text-slate-800">تشغيل:</strong> يظهر «إضافة» ليوم الجمعة ويُحسب الغياب كباقي الأيام.
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center gap-3">
+            <span className="text-sm font-medium text-slate-600">
+              {fridayAttendanceEnabled ? 'تشغيل' : 'إيقاف'}
+            </span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={fridayAttendanceEnabled}
+              aria-label={fridayAttendanceEnabled ? 'إيقاف دوام الجمعة' : 'تشغيل دوام الجمعة'}
+              onClick={() => setFridayAttendanceEnabled(!fridayAttendanceEnabled)}
+              className={cn(
+                'relative h-8 w-14 shrink-0 rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500',
+                fridayAttendanceEnabled ? 'bg-slate-700' : 'bg-slate-300'
+              )}
+            >
+              <span
+                className={cn(
+                  'absolute top-1 h-6 w-6 rounded-full bg-white shadow-sm transition-all duration-200 ease-out',
+                  fridayAttendanceEnabled ? 'inset-inline-end-1' : 'inset-inline-start-1'
+                )}
+              />
+            </button>
+          </div>
+        </div>
       </div>
 
       {loading ? (

@@ -12,8 +12,22 @@ import { Star } from 'lucide-react'
 import { formatTime12From24 } from '@/lib/timeFormat'
 import { isWithinInterval, parse, startOfDay } from 'date-fns'
 import { getArabicWeekdayName } from '@/lib/weekUtils'
+import {
+  numNeutral,
+  tableBaseClass,
+  tableCellLast,
+  tableHeadCell,
+  tableHeadSticky,
+  tableRowCell,
+  tableRowGroup,
+  tableShellClass,
+  tableTotalCell,
+  tableTotalRow,
+} from '@/lib/tableUi'
+import { useFridayAttendance } from '@/contexts/FridayAttendanceContext'
 
 export function Dashboard() {
+  const { fridayAttendanceEnabled } = useFridayAttendance()
   const [weekRef, setWeekRef] = useState(() => getWeekStart(new Date()))
   const [employees, setEmployees] = useState<Employee[]>([])
   const [attendance, setAttendance] = useState<Attendance[]>([])
@@ -104,6 +118,7 @@ export function Dashboard() {
   const detailYmd = toYmd(detailDay)
   const detailDayArabic = useMemo(() => getArabicWeekdayName(detailDay), [detailDay])
   const detailIsFriday = detailDayArabic === 'الجمعة'
+  const detailFridayRestDay = detailIsFriday && !fridayAttendanceEnabled
 
   const detailRows = useMemo(() => {
     return employees.map((e) => {
@@ -144,14 +159,14 @@ export function Dashboard() {
           <>
             <div className="rounded-2xl border border-[var(--color-border)] bg-app-card p-5 text-right shadow-sm sm:p-6">
               <p className="text-sm font-medium text-[var(--color-text-secondary)]">إجمالي رواتب الأسبوع</p>
-              <p className="mt-3 text-center font-mono-nums text-2xl font-bold text-[var(--color-success)]">
+              <p className={cn('mt-3 text-center font-mono-nums text-2xl font-semibold text-slate-800')}>
                 د.أ {roundDisplay(stats.total)}
               </p>
             </div>
             <div className="rounded-2xl border border-[var(--color-border)] bg-app-card p-5 text-right shadow-sm sm:p-6">
               <p className="text-sm font-medium text-[var(--color-text-secondary)]">الموظفون النشطون هذا الأسبوع</p>
-              <p className="mt-3 text-center font-mono-nums text-2xl font-bold text-[var(--color-accent-blue)]" dir="ltr">
-                <span className="text-[var(--color-success)]">{stats.activeCount}</span>
+              <p className="mt-3 text-center font-mono-nums text-2xl font-semibold text-slate-800" dir="ltr">
+                <span className="text-slate-800">{stats.activeCount}</span>
                 <span className="text-[var(--color-text-muted)]"> / </span>
                 <span className="text-[var(--color-text-primary)]">{employees.length}</span>
               </p>
@@ -167,7 +182,7 @@ export function Dashboard() {
             <div className="rounded-2xl border border-[var(--color-border)] bg-app-card p-5 text-right shadow-sm sm:p-6">
               <p className="text-sm font-medium text-[var(--color-text-secondary)]">الأعلى راتباً</p>
               <p className="mt-3 text-right text-lg font-bold text-[var(--color-text-primary)]">{stats.topName}</p>
-              <p className="mt-1 text-center font-mono-nums text-xl font-bold text-[var(--color-success)]">
+              <p className="mt-1 text-center font-mono-nums text-xl font-semibold text-slate-800">
                 {stats.topVal >= 0 ? `د.أ ${roundDisplay(stats.topVal)}` : '—'}
               </p>
             </div>
@@ -175,7 +190,7 @@ export function Dashboard() {
         )}
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-[var(--color-border)] bg-app-card shadow-sm">
+      <div className={tableShellClass}>
         {loading ? (
           <Skeleton className="m-4 h-96 w-full min-w-[800px]" />
         ) : employees.length === 0 ? (
@@ -183,18 +198,31 @@ export function Dashboard() {
             لم تُضف أي موظف بعد. افتح صفحة «الموظفون» لإضافة الفريق ثم ارجع لهذه اللوحة.
           </p>
         ) : (
-          <table className="w-full min-w-[900px] border-collapse text-sm" dir="rtl">
+          <table className={cn(tableBaseClass, 'min-w-[920px]')} dir="rtl">
             <thead>
-              <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg-surface)] text-sm text-[var(--color-text-secondary)]">
-                <th className="sticky start-0 z-10 min-w-[140px] bg-[var(--color-bg-surface)] p-3.5 text-right font-semibold text-[var(--color-text-primary)] sm:p-4">
+              <tr>
+                <th
+                  className={cn(
+                    tableHeadCell,
+                    tableHeadSticky,
+                    'sticky start-0 z-30 min-w-[150px] text-right shadow-[1px_0_0_rgb(203,213,225)]'
+                  )}
+                >
                   اليوم / التاريخ
                 </th>
                 {employees.map((e) => (
-                  <th key={e.id} className="p-3.5 text-center font-semibold whitespace-nowrap text-[var(--color-text-primary)] sm:p-4">
+                  <th
+                    key={e.id}
+                    className={cn(tableHeadCell, tableHeadSticky, 'z-20 whitespace-nowrap text-center font-semibold')}
+                  >
                     {e.name}
                   </th>
                 ))}
-                <th className="p-3.5 text-center font-semibold text-[var(--color-success)] sm:p-4">مجموع اليوم</th>
+                <th
+                  className={cn(tableHeadCell, tableHeadSticky, tableCellLast, 'z-20 text-center text-slate-900')}
+                >
+                  مجموع اليوم
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -203,66 +231,66 @@ export function Dashboard() {
                 const rowDateStr = toYmd(rowDate)
                 const isFriday = rowLabel === 'الجمعة'
                 const isWedNight = rowLabel === 'سهرة الأربعاء'
-                const rowBg = isWedNight
-                  ? 'bg-[var(--color-gold-bg)]/50'
-                  : isFriday
-                    ? 'bg-[var(--color-purple-bg)]/60'
-                    : idx % 2 === 0
-                      ? 'bg-[var(--color-bg-base)]'
-                      : ''
+                const zebra = idx % 2 === 0
 
                 let daySum = 0
                 const cells = employees.map((e) => {
                   const att = findAttendanceCell(attendance, e.id, wsStr, rowLabel, rowDateStr)
                   if (att?.daily_wage != null) daySum += att.daily_wage
-                  const absent = !att && !isFriday && !isWedNight
+                  const absent = !att && !isWedNight && (!isFriday || fridayAttendanceEnabled)
                   return { att, absent }
                 })
 
                 return (
-                  <tr
-                    key={rowLabel}
-                    className={cn(
-                      'border-b border-[var(--color-border)]/80 transition-colors hover:bg-[var(--color-bg-surface)]/40',
-                      rowBg
-                    )}
-                  >
+                  <tr key={rowLabel} className={tableRowGroup}>
                     <td
                       className={cn(
-                        'sticky start-0 z-10 border-[var(--color-border)] border-e bg-app-card/98 p-3.5 text-right font-semibold backdrop-blur-sm sm:p-4',
-                        isWedNight && 'text-[var(--color-gold)]',
-                        isFriday && 'text-[var(--color-purple)]'
+                        tableRowCell(zebra),
+                        'sticky start-0 z-10 border-e-2 border-e-slate-300 text-right font-semibold leading-snug',
+                        isWedNight && 'text-amber-900',
+                        isFriday && 'text-indigo-900'
                       )}
                     >
                       {rowLabel}
-                      {isWedNight ? <Star className="ms-1 inline h-4 w-4 text-[var(--color-gold)]" /> : null}
-                      <div className="font-mono-nums text-xs font-normal text-[var(--color-accent-blue)]" dir="ltr">
+                      {isWedNight ? <Star className="ms-1 inline h-4 w-4 text-amber-600" /> : null}
+                      <div className="mt-0.5 font-mono-nums text-xs font-medium text-slate-500 sm:text-sm" dir="ltr">
                         {formatDateEn(rowDate)}
                       </div>
                     </td>
                     {cells.map(({ att, absent }, i) => (
-                      <td key={employees[i].id} className="p-3.5 text-center align-middle font-mono-nums sm:p-4">
+                      <td
+                        key={employees[i].id}
+                        className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm sm:text-[15px]')}
+                      >
                         {att?.daily_wage != null ? (
-                          <span className="inline-flex min-w-[2.5rem] items-center justify-center rounded-lg bg-[var(--color-success-bg)] px-2 py-1 text-sm font-bold text-[var(--color-success)]">
-                            {roundDisplay(att.daily_wage)}
-                          </span>
+                          <span className={numNeutral}>{roundDisplay(att.daily_wage)}</span>
                         ) : absent ? (
-                          <span className="inline-block min-w-[3.5rem] rounded-lg border border-[var(--color-danger-bg)] bg-[var(--color-danger-bg)] px-2.5 py-1 text-xs font-semibold text-[var(--color-danger)]">
+                          <span className="inline-block min-w-[3rem] rounded-md bg-red-50 px-2 py-1 text-xs font-semibold text-red-900 ring-1 ring-inset ring-red-100 sm:text-sm">
                             غياب
                           </span>
                         ) : (
-                          <span className="text-[var(--color-text-muted)]">—</span>
+                          <span className="text-slate-400">—</span>
                         )}
                       </td>
                     ))}
-                    <td className="p-3.5 text-center align-middle font-mono-nums font-bold text-[var(--color-accent-blue)] sm:p-4">
+                    <td
+                      className={cn(
+                        tableRowCell(zebra),
+                        tableCellLast,
+                        'text-center font-mono-nums text-sm font-bold text-slate-900 sm:text-[15px]'
+                      )}
+                    >
                       {daySum > 0 ? roundDisplay(daySum) : '—'}
                     </td>
                   </tr>
                 )
               })}
-              <tr className="border-t border-[var(--color-border)] bg-[var(--color-success-bg)]/45 font-bold text-[var(--color-text-primary)]">
-                <td className="sticky start-0 z-10 border-[var(--color-border)] border-e bg-[var(--color-success-bg)]/55 p-3.5 text-right backdrop-blur-sm sm:p-4">
+              <tr className={tableTotalRow}>
+                <td
+                  className={cn(
+                    tableTotalCell('sticky start-0 z-10 border-e-2 border-e-slate-400/60 py-4 text-right text-base')
+                  )}
+                >
                   مجموع الأسبوع
                 </td>
                 {employees.map((e) => {
@@ -270,12 +298,20 @@ export function Dashboard() {
                     .filter((a) => a.employee_id === e.id && a.week_start_date === wsStr)
                     .reduce((s, a) => s + (a.daily_wage ?? 0), 0)
                   return (
-                    <td key={e.id} className="p-3.5 text-center align-middle font-mono-nums sm:p-4">
+                    <td
+                      key={e.id}
+                      className={cn(tableTotalCell('text-center font-mono-nums text-[15px]'))}
+                    >
                       {roundDisplay(sum)}
                     </td>
                   )
                 })}
-                <td className="p-3.5 text-center align-middle font-mono-nums text-[var(--color-success)] sm:p-4">
+                <td
+                  className={cn(
+                    tableTotalCell('text-center font-mono-nums text-base'),
+                    tableCellLast
+                  )}
+                >
                   {roundDisplay(stats.total)}
                 </td>
               </tr>
@@ -313,25 +349,34 @@ export function Dashboard() {
             }}
           />
         </div>
-        <div className="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-app-card shadow-sm">
+        <div className={cn(tableShellClass, 'overflow-hidden')}>
           {employees.length === 0 ? (
             <p className="p-6 text-center text-[var(--color-text-secondary)]">أضف موظفين أولاً لعرض التفاصيل.</p>
           ) : (
-            <table className="w-full border-collapse text-sm" dir="rtl">
+            <table className={tableBaseClass} dir="rtl">
               <thead>
-                <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg-surface)] text-sm text-[var(--color-text-secondary)]">
-                  <th className="w-12 p-3.5 text-center sm:p-4" />
-                  <th className="p-3.5 text-right font-semibold text-[var(--color-text-primary)] sm:p-4">الموظف</th>
-                  <th className="p-3.5 text-center font-mono-nums font-semibold text-[var(--color-text-primary)] sm:p-4">
+                <tr>
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-12 max-w-[3rem] px-2 text-center')} />
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 min-w-[8rem] text-right')}>
+                    الموظف
+                  </th>
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
                     حضور
                   </th>
-                  <th className="p-3.5 text-center font-mono-nums font-semibold text-[var(--color-text-primary)] sm:p-4">
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
                     مغادرة
                   </th>
-                  <th className="p-3.5 text-center font-mono-nums font-semibold text-[var(--color-text-primary)] sm:p-4">
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
                     اليومية
                   </th>
-                  <th className="p-3.5 text-center font-mono-nums font-semibold text-[var(--color-text-primary)] sm:p-4">
+                  <th
+                    className={cn(
+                      tableHeadCell,
+                      tableHeadSticky,
+                      tableCellLast,
+                      'z-20 text-center font-mono-nums'
+                    )}
+                  >
                     اليوم
                   </th>
                 </tr>
@@ -340,50 +385,80 @@ export function Dashboard() {
                 {detailRows.map(({ employee: e, att }, idx) => {
                   const baseDaily = e.hourly_rate * 8
                   const sel = selectedIds.has(e.id)
-                  const absent = !detailIsFriday && !att
+                  const absent = !att && (!detailIsFriday || fridayAttendanceEnabled)
+                  const zebra = idx % 2 === 0
+                  const rowPick = sel && att ? '!bg-amber-100 group-hover/row:!bg-amber-200' : ''
                   return (
-                    <tr
-                      key={e.id}
-                      className={cn(
-                        'border-b border-[var(--color-border)]/80 transition-colors hover:bg-[var(--color-bg-surface)]/35',
-                        idx % 2 === 0 && 'bg-[var(--color-bg-base)]/80',
-                        sel && att && 'bg-[var(--color-accent-blue-bg)]/55'
-                      )}
-                    >
-                      <td className="p-3.5 text-center align-middle sm:p-4">
+                    <tr key={e.id} className={tableRowGroup}>
+                      <td className={cn(tableRowCell(zebra), 'text-center', rowPick)}>
                         <input
                           type="checkbox"
                           checked={sel}
                           onChange={() => toggleSel(e.id)}
                           disabled={!att}
-                          className="h-4 w-4 accent-[var(--color-success)] disabled:opacity-40"
+                          className="h-4 w-4 accent-slate-700 disabled:opacity-40"
                         />
                       </td>
-                      <td className="p-3.5 text-right font-semibold text-[var(--color-text-primary)] sm:p-4">{e.name}</td>
-                      <td className="p-3.5 text-center align-middle font-mono-nums sm:p-4">
-                        {detailIsFriday ? (
-                          '—'
+                      <td className={cn(tableRowCell(zebra), 'text-right font-semibold text-slate-900', rowPick)}>
+                        {e.name}
+                      </td>
+                      <td
+                        className={cn(
+                          tableRowCell(zebra),
+                          'text-center font-mono-nums text-sm sm:text-[15px]',
+                          rowPick
+                        )}
+                      >
+                        {detailFridayRestDay ? (
+                          <span className="text-slate-400">—</span>
                         ) : absent ? (
-                          <span className="inline-block rounded-md border border-[var(--color-danger-bg)] bg-[var(--color-danger-bg)] px-2 py-0.5 text-xs font-semibold text-[var(--color-danger)]">
+                          <span className="inline-block rounded-md bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-900 ring-1 ring-inset ring-red-100 sm:text-sm">
                             غياب
                           </span>
                         ) : (
                           formatTime12From24(att!.check_in)
                         )}
                       </td>
-                      <td className="p-3.5 text-center align-middle font-mono-nums sm:p-4">
-                        {detailIsFriday ? '—' : absent ? '—' : formatTime12From24(att!.check_out)}
-                      </td>
-                      <td className="p-3.5 text-center align-middle font-mono-nums text-[var(--color-text-secondary)] sm:p-4">
-                        {detailIsFriday ? '—' : absent ? '—' : roundDisplay(baseDaily)}
+                      <td
+                        className={cn(
+                          tableRowCell(zebra),
+                          'text-center font-mono-nums text-sm sm:text-[15px]',
+                          rowPick
+                        )}
+                      >
+                        {detailFridayRestDay ? (
+                          <span className="text-slate-400">—</span>
+                        ) : absent ? (
+                          <span className="text-slate-400">—</span>
+                        ) : (
+                          formatTime12From24(att!.check_out)
+                        )}
                       </td>
                       <td
                         className={cn(
-                          'p-3.5 text-center align-middle font-mono-nums font-bold sm:p-4',
-                          absent ? 'text-[var(--color-danger)]' : 'text-[var(--color-success)]'
+                          tableRowCell(zebra),
+                          'text-center font-mono-nums text-sm text-slate-600 sm:text-[15px]',
+                          rowPick
                         )}
                       >
-                        {detailIsFriday
+                        {detailFridayRestDay ? (
+                          <span className="text-slate-400">—</span>
+                        ) : absent ? (
+                          <span className="text-slate-400">—</span>
+                        ) : (
+                          roundDisplay(baseDaily)
+                        )}
+                      </td>
+                      <td
+                        className={cn(
+                          tableRowCell(zebra),
+                          tableCellLast,
+                          'text-center font-mono-nums text-sm font-semibold sm:text-[15px]',
+                          absent ? 'text-red-900' : 'text-slate-900',
+                          rowPick
+                        )}
+                      >
+                        {detailFridayRestDay
                           ? '—'
                           : absent
                             ? '—'
@@ -398,9 +473,9 @@ export function Dashboard() {
             </table>
           )}
         </div>
-        <div className="rounded-xl border border-[var(--color-success-bg)] bg-[var(--color-success-bg)]/50 px-4 py-3.5 text-[var(--color-success)] shadow-sm sm:px-5">
+        <div className="rounded-xl border border-slate-200 bg-slate-100 px-4 py-3.5 text-slate-700 shadow-sm sm:px-5">
           المحدد ({selectedIds.size}): د.أ{' '}
-          <span className="font-mono-nums font-bold text-[var(--color-text-primary)]">{roundDisplay(selectedSum)}</span>
+          <span className="font-mono-nums font-semibold text-slate-900">{roundDisplay(selectedSum)}</span>
         </div>
       </section>
     </Layout>

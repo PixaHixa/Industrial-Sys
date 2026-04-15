@@ -40,7 +40,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={t.id}
             className={
               t.kind === 'success'
-                ? 'rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-900 shadow-sm'
+                ? 'rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm'
                 : 'rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-900 shadow-sm'
             }
             role="status"
