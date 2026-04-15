@@ -265,9 +265,10 @@ export function Dashboard() {
                         {att?.daily_wage != null ? (
                           <span className={numNeutral}>{roundDisplay(att.daily_wage)}</span>
                         ) : absent ? (
-                          <span className="inline-block min-w-[3rem] rounded-md bg-red-50 px-2 py-1 text-xs font-semibold text-red-900 ring-1 ring-inset ring-red-100 sm:text-sm">
-                            غياب
-                          </span>
+                          <span
+                            className="inline-block min-h-[1.35rem] min-w-[3rem] rounded-md bg-red-50 px-2 py-1 align-middle ring-1 ring-inset ring-red-100 sm:min-h-[1.5rem]"
+                            aria-label="غياب"
+                          />
                         ) : (
                           <span className="text-slate-400">—</span>
                         )}
@@ -412,9 +413,10 @@ export function Dashboard() {
                         {detailFridayRestDay ? (
                           <span className="text-slate-400">—</span>
                         ) : absent ? (
-                          <span className="inline-block rounded-md bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-900 ring-1 ring-inset ring-red-100 sm:text-sm">
-                            غياب
-                          </span>
+                          <span
+                            className="inline-block min-h-[1.25rem] min-w-[2.75rem] rounded-md bg-red-50 px-2 py-0.5 align-middle ring-1 ring-inset ring-red-100 sm:text-sm"
+                            aria-label="غياب"
+                          />
                         ) : (
                           formatTime12From24(att!.check_in)
                         )}

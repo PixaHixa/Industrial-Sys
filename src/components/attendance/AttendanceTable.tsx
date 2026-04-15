@@ -2,7 +2,7 @@ import { WEEK_ORDER, getRowDateForWeekRow, type WeekDayLabel } from '@/lib/weekU
 import { formatDateEn, roundDisplay, toYmd } from '@/lib/format'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
-import { Pencil, Plus, Star, Trash2, X } from 'lucide-react'
+import { Pencil, Plus, Star, Trash2 } from 'lucide-react'
 import type { Attendance, Employee } from '@/types'
 import { cn } from '@/lib/utils'
 import { formatTime12From24 } from '@/lib/timeFormat'
@@ -110,9 +110,10 @@ export function AttendanceTable({
                       <span dir="ltr">{formatTime12From24(att.check_out)}</span>
                     </span>
                   ) : absent ? (
-                    <span className="inline-flex items-center gap-1.5 rounded-md bg-red-50 px-2.5 py-1 text-sm font-semibold text-red-900 ring-1 ring-inset ring-red-100">
-                      <X className="h-4 w-4 shrink-0" /> غياب
-                    </span>
+                    <span
+                      className="inline-block min-h-[1.5rem] min-w-[3rem] rounded-md bg-red-50 px-2.5 py-1 align-middle ring-1 ring-inset ring-red-100"
+                      aria-label="غياب"
+                    />
                   ) : (
                     <span className="text-slate-400">—</span>
                   )}
