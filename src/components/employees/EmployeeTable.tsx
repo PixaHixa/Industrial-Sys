@@ -27,7 +27,7 @@ export function EmployeeTable({ employees, loading, onEdit, onDeleteRequest }: E
     return (
       <div className="space-y-2 rounded-2xl border border-[var(--color-border)] bg-app-card p-5 shadow-sm">
         {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={i} className="h-12 w-full rounded-lg" />
+          <Skeleton key={i} className="h-8 w-full rounded-lg" />
         ))}
       </div>
     )
@@ -46,10 +46,10 @@ export function EmployeeTable({ employees, loading, onEdit, onDeleteRequest }: E
       <table className={cn(tableBaseClass, 'table-fixed')} dir="rtl">
         <thead>
           <tr>
-            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[9%] px-2 text-center font-mono-nums')}>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[9%] text-center font-mono-nums')}>
               المعرف
             </th>
-            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[22%] text-right')}>الاسم</th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[22%] min-w-0 text-right')}>الاسم</th>
             <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
               سعر الساعة
             </th>
@@ -74,31 +74,41 @@ export function EmployeeTable({ employees, loading, onEdit, onDeleteRequest }: E
             const zebra = idx % 2 === 0
             return (
               <tr key={e.id} className={tableRowGroup}>
-                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm text-slate-700')}>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-xs text-slate-700')}>
                   {e.employee_id}
                 </td>
-                <td className={cn(tableRowCell(zebra), 'text-right text-sm font-semibold text-slate-900')}>
+                <td className={cn(tableRowCell(zebra), 'min-w-0 truncate text-right text-sm font-medium text-slate-900')}>
                   {e.name}
                 </td>
-                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm text-slate-800')}>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-xs text-slate-800')}>
                   {roundDisplay(e.hourly_rate)}
                 </td>
-                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm text-slate-800')}>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-xs text-slate-800')}>
                   {roundDisplay(e.transport_allowance)}
                 </td>
-                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm')}>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-xs')}>
                   <span className={numNeutral}>{roundDisplay(e.hourly_rate * 8)}</span>
                 </td>
-                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm')}>
+                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-xs')}>
                   <span className={numNeutral}>{roundDisplay(e.hourly_rate * 8 * 6)}</span>
                 </td>
                 <td className={cn(tableRowCell(zebra), tableCellLast, 'text-center')}>
-                  <div className="flex flex-wrap items-center justify-center gap-2">
-                    <Button size="sm" variant="secondary" onClick={() => onEdit(e)}>
-                      <Pencil className="h-4 w-4" /> تعديل
+                  <div className="flex flex-wrap items-center justify-center gap-1">
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                      onClick={() => onEdit(e)}
+                    >
+                      <Pencil className="h-3 w-3 shrink-0" /> تعديل
                     </Button>
-                    <Button size="sm" variant="danger" onClick={() => onDeleteRequest(e)}>
-                      <Trash2 className="h-4 w-4" /> حذف
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                      onClick={() => onDeleteRequest(e)}
+                    >
+                      <Trash2 className="h-3 w-3 shrink-0" /> حذف
                     </Button>
                   </div>
                 </td>

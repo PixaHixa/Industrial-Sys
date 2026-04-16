@@ -41,17 +41,17 @@ export function AttendanceTable({
 
   return (
     <div className={tableShellClass}>
-      <table className={cn(tableBaseClass, 'min-w-[680px]')} dir="rtl">
+      <table className={cn(tableBaseClass, 'table-fixed min-w-[680px]')} dir="rtl">
         <thead>
           <tr>
-            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 min-w-[7rem] text-right')}>اليوم</th>
-            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[18%] min-w-0 text-right')}>اليوم</th>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[14%] min-w-0 text-center font-mono-nums')}>
               التاريخ
             </th>
-            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 min-w-[11rem] text-right')}>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 min-w-0 text-right')}>
               الدوام
             </th>
-            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+            <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[12%] min-w-0 text-center font-mono-nums')}>
               الراتب
             </th>
             <th className={cn(tableHeadCell, tableHeadSticky, tableCellLast, 'z-20 text-center')}>
@@ -74,26 +74,26 @@ export function AttendanceTable({
                 <td
                   className={cn(
                     tableRowCell(zebra),
-                    'text-right text-sm font-semibold sm:text-[15px]',
+                    'min-w-0 truncate text-right text-sm font-medium',
                     isWedNight && 'text-amber-900',
                     isFriday && 'text-indigo-900'
                   )}
                 >
                   {rowLabel}
-                  {isWedNight ? <Star className="ms-1 inline h-4 w-4 text-amber-600" /> : null}
+                  {isWedNight ? <Star className="ms-0.5 inline h-3 w-3 shrink-0 text-amber-600" /> : null}
                 </td>
                 <td
                   className={cn(
                     tableRowCell(zebra),
-                    'text-center font-mono-nums text-sm text-slate-600 sm:text-[15px]'
+                    'min-w-0 truncate text-center font-mono-nums text-xs text-slate-600'
                   )}
                 >
                   {formatDateEn(rowDate)}
                 </td>
-                <td className={cn(tableRowCell(zebra), 'text-right text-sm sm:text-[15px]')}>
+                <td className={cn(tableRowCell(zebra), 'min-w-0 text-right text-xs')}>
                   {att?.is_carried_over ? (
-                    <div className="flex flex-wrap items-center justify-end gap-2">
-                      <Badge className="border border-amber-200/80 bg-amber-50 text-amber-900">
+                    <div className="flex flex-wrap items-center justify-end gap-1">
+                      <Badge className="rounded-md border border-amber-200/60 bg-amber-50/90 px-1.5 py-0.5 text-[10px] font-medium text-amber-900">
                         مُرحّل
                       </Badge>
                       <span className="text-slate-400">—</span>
@@ -101,24 +101,28 @@ export function AttendanceTable({
                   ) : att ? (
                     <span
                       dir="rtl"
-                      className="inline-flex items-center justify-center gap-2 font-mono-nums text-slate-900"
+                      className="inline-flex min-w-0 max-w-full items-center justify-end gap-1 truncate font-mono-nums text-slate-900"
                     >
-                      <span dir="ltr">{formatTime12From24(att.check_in)}</span>
-                      <span className="text-slate-400" dir="ltr">
+                      <span dir="ltr" className="truncate">
+                        {formatTime12From24(att.check_in)}
+                      </span>
+                      <span className="shrink-0 text-slate-400" dir="ltr">
                         —
                       </span>
-                      <span dir="ltr">{formatTime12From24(att.check_out)}</span>
+                      <span dir="ltr" className="truncate">
+                        {formatTime12From24(att.check_out)}
+                      </span>
                     </span>
                   ) : absent ? (
                     <span
-                      className="inline-block min-h-[1.5rem] min-w-[3rem] rounded-md bg-red-50 px-2.5 py-1 align-middle ring-1 ring-inset ring-red-100"
+                      className="inline-block min-h-[1.25rem] min-w-[2.5rem] rounded-md bg-red-50/90 px-1.5 py-0.5 align-middle ring-1 ring-inset ring-red-100/80"
                       aria-label="غياب"
                     />
                   ) : (
                     <span className="text-slate-400">—</span>
                   )}
                 </td>
-                <td className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm sm:text-[15px]')}>
+                <td className={cn(tableRowCell(zebra), 'min-w-0 text-center font-mono-nums text-xs')}>
                   {att && att.daily_wage != null ? (
                     <span className={numNeutral}>د.أ {roundDisplay(att.daily_wage)}</span>
                   ) : (
@@ -126,7 +130,7 @@ export function AttendanceTable({
                   )}
                 </td>
                 <td className={cn(tableRowCell(zebra), tableCellLast, 'text-center')}>
-                  <div className="flex flex-wrap justify-center gap-2">
+                  <div className="flex flex-wrap justify-center gap-1">
                     {att ? (
                       <>
                         {!att.is_carried_over ? (
@@ -134,27 +138,39 @@ export function AttendanceTable({
                             <Button
                               size="sm"
                               variant="secondary"
+                              className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
                               onClick={() => onEdit(rowLabel, rowDate, att)}
                             >
-                              <Pencil className="h-4 w-4" /> تعديل
+                              <Pencil className="h-3 w-3 shrink-0" /> تعديل
                             </Button>
                             <Button
                               size="sm"
                               variant="danger"
+                              className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
                               onClick={() => onDeleteRow(att)}
                             >
-                              <Trash2 className="h-4 w-4" /> حذف
+                              <Trash2 className="h-3 w-3 shrink-0" /> حذف
                             </Button>
                           </>
                         ) : (
-                          <Button size="sm" variant="danger" onClick={() => onDeleteRow(att)}>
-                            <Trash2 className="h-4 w-4" /> حذف
+                          <Button
+                            size="sm"
+                            variant="danger"
+                            className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                            onClick={() => onDeleteRow(att)}
+                          >
+                            <Trash2 className="h-3 w-3 shrink-0" /> حذف
                           </Button>
                         )}
                       </>
                     ) : isWedNight ? null : isFriday && !fridayAttendanceEnabled ? null : (
-                      <Button size="sm" variant="primary" onClick={() => onAdd(rowLabel, rowDate)}>
-                        <Plus className="h-4 w-4" /> إضافة
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                        onClick={() => onAdd(rowLabel, rowDate)}
+                      >
+                        <Plus className="h-3 w-3 shrink-0" /> إضافة
                       </Button>
                     )}
                   </div>

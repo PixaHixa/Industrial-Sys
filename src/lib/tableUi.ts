@@ -5,7 +5,7 @@ export const tableShellClass =
   'overflow-x-auto rounded-xl border border-slate-300/90 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]'
 
 export const tableBaseClass =
-  'w-full border-collapse text-[15px] leading-relaxed text-slate-900 [font-feature-settings:normal]'
+  'w-full border-collapse text-sm leading-snug text-slate-900 [font-feature-settings:normal]'
 
 /** صف جسم تفاعلي — hover يغيّر لون كل الخلايا */
 export const tableRowGroup = 'group/row transition-[background-color] duration-150 ease-out'
@@ -13,17 +13,17 @@ export const tableRowGroup = 'group/row transition-[background-color] duration-1
 /** خلفية الصف + hover بارز (رمادي واضح) */
 export function tableRowCell(zebraEven: boolean) {
   return cn(
-    'border-b border-b-slate-200 border-e border-e-slate-200/70 px-4 py-3.5 align-middle transition-colors duration-150 sm:px-5 sm:py-4',
+    'border-b border-b-slate-200 px-2 py-1.5 align-middle transition-colors duration-150 sm:px-3 sm:py-2',
     zebraEven ? 'bg-white' : 'bg-slate-50',
     'group-hover/row:bg-slate-200'
   )
 }
 
 export const tableHeadCell =
-  'border-b-2 border-b-slate-400 border-e border-e-slate-200/80 bg-slate-100 px-4 py-3.5 text-sm font-bold text-slate-900 sm:px-5 sm:py-4 sm:text-base'
+  'border-b border-b-slate-300 bg-slate-100 px-2 py-1.5 text-xs font-medium text-slate-800 sm:px-3 sm:py-2 sm:text-sm'
 
 export const tableHeadSticky =
-  'sticky top-0 z-20 bg-slate-100 shadow-[0_1px_0_0_rgb(148,163,184)]'
+  'sticky top-0 z-20 bg-slate-100 shadow-[0_1px_0_0_rgb(183,198,214)]'
 
 export const tableCellLast = 'border-e-0'
 
@@ -32,7 +32,7 @@ export const tableTotalRow = 'bg-slate-300/40 text-slate-900'
 
 export function tableTotalCell(extra?: string) {
   return cn(
-    'border-b border-b-slate-300/80 border-e border-e-slate-300/60 bg-slate-300/35 px-4 py-3.5 font-bold sm:px-5 sm:py-4',
+    'border-b border-b-slate-300/80 bg-slate-300/35 px-2 py-1.5 font-semibold sm:px-3 sm:py-2',
     extra
   )
 }

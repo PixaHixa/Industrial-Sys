@@ -87,14 +87,14 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
       </div>
 
       <div className={cn(tableShellClass, 'overflow-hidden')}>
-        <table className={cn(tableBaseClass, 'min-w-[1040px]')} dir="rtl">
+        <table className={cn(tableBaseClass, 'table-fixed min-w-[1040px]')} dir="rtl">
           <thead>
             <tr>
               <th
                 className={cn(
                   tableHeadCell,
                   tableHeadSticky,
-                  'sticky start-0 z-30 min-w-[10rem] text-right shadow-[1px_0_0_rgb(203,213,225)]'
+                  'sticky start-0 z-30 w-[11rem] min-w-0 max-w-[13rem] text-right shadow-[1px_0_0_rgb(226,232,240)]'
                 )}
               >
                 الموظف
@@ -105,14 +105,19 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
                   className={cn(
                     tableHeadCell,
                     tableHeadSticky,
-                    'z-20 max-w-[4.5rem] px-2 py-3 text-center text-[11px] font-bold leading-snug whitespace-normal sm:text-xs'
+                    'z-20 min-w-0 px-1 text-center text-[10px] font-medium leading-tight whitespace-normal'
                   )}
                 >
                   {l}
                 </th>
               ))}
               <th
-                className={cn(tableHeadCell, tableHeadSticky, tableCellLast, 'z-20 min-w-[5rem] text-center')}
+                className={cn(
+                  tableHeadCell,
+                  tableHeadSticky,
+                  tableCellLast,
+                  'z-20 w-[4.5rem] min-w-0 text-center'
+                )}
               >
                 المجموع
               </th>
@@ -126,12 +131,14 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
                   <td
                     className={cn(
                       tableRowCell(zebra),
-                      'sticky start-0 z-10 border-e-2 border-e-slate-300 text-right text-sm font-semibold sm:text-base'
+                      'sticky start-0 z-10 min-w-0 border-e border-e-slate-200 text-right text-sm font-medium'
                     )}
                   >
-                    <span className="leading-snug">{e.name}</span>{' '}
-                    <span className="mt-0.5 block font-mono-nums text-xs font-normal text-slate-500 sm:mt-0 sm:inline sm:text-sm">
-                      ({e.employee_id})
+                    <span className="block truncate leading-snug">
+                      {e.name}{' '}
+                      <span className="font-mono-nums text-[11px] font-normal text-slate-500">
+                        ({e.employee_id})
+                      </span>
                     </span>
                   </td>
                   {rows.map(({ label, wage }) => (
@@ -139,7 +146,7 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
                       key={label}
                       className={cn(
                         tableRowCell(zebra),
-                        'text-center font-mono-nums text-sm font-semibold sm:text-[15px]'
+                        'min-w-0 text-center font-mono-nums text-xs font-medium'
                       )}
                     >
                       {wage != null ? (
@@ -153,7 +160,7 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
                     className={cn(
                       tableRowCell(zebra),
                       tableCellLast,
-                      'text-center font-mono-nums text-sm font-bold text-slate-900 sm:text-base'
+                      'text-center font-mono-nums text-xs font-semibold text-slate-900'
                     )}
                   >
                     {roundDisplay(sum)}
@@ -164,7 +171,9 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
             <tr className={tableTotalRow}>
               <td
                 className={cn(
-                  tableTotalCell('sticky start-0 z-10 border-e-2 border-e-slate-400/60 py-4 text-right text-base')
+                  tableTotalCell(
+                    'sticky start-0 z-10 border-e border-e-slate-300 py-2 text-right text-sm'
+                  )
                 )}
               >
                 المجموع الكلي
@@ -180,9 +189,7 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
                 return (
                   <td
                     key={label}
-                    className={cn(
-                      tableTotalCell('text-center font-mono-nums text-sm sm:text-[15px]')
-                    )}
+                    className={cn(tableTotalCell('text-center font-mono-nums text-xs'))}
                   >
                     {roundDisplay(daySum)}
                   </td>
@@ -190,7 +197,7 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
               })}
               <td
                 className={cn(
-                  tableTotalCell('text-center font-mono-nums text-base'),
+                  tableTotalCell('text-center font-mono-nums text-sm'),
                   tableCellLast
                 )}
               >

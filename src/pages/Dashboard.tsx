@@ -205,7 +205,7 @@ export function Dashboard() {
                   className={cn(
                     tableHeadCell,
                     tableHeadSticky,
-                    'sticky start-0 z-30 min-w-[150px] text-right shadow-[1px_0_0_rgb(203,213,225)]'
+                    'sticky start-0 z-30 min-w-[7.5rem] max-w-[9rem] text-right shadow-[1px_0_0_rgb(226,232,240)]'
                   )}
                 >
                   اليوم / التاريخ
@@ -213,13 +213,22 @@ export function Dashboard() {
                 {employees.map((e) => (
                   <th
                     key={e.id}
-                    className={cn(tableHeadCell, tableHeadSticky, 'z-20 whitespace-nowrap text-center font-semibold')}
+                    className={cn(
+                      tableHeadCell,
+                      tableHeadSticky,
+                      'z-20 min-w-0 max-w-[6.5rem] truncate px-1.5 text-center font-medium'
+                    )}
                   >
                     {e.name}
                   </th>
                 ))}
                 <th
-                  className={cn(tableHeadCell, tableHeadSticky, tableCellLast, 'z-20 text-center text-slate-900')}
+                  className={cn(
+                    tableHeadCell,
+                    tableHeadSticky,
+                    tableCellLast,
+                    'z-20 min-w-[4.5rem] text-center font-medium text-slate-900'
+                  )}
                 >
                   مجموع اليوم
                 </th>
@@ -246,27 +255,27 @@ export function Dashboard() {
                     <td
                       className={cn(
                         tableRowCell(zebra),
-                        'sticky start-0 z-10 border-e-2 border-e-slate-300 text-right font-semibold leading-snug',
+                        'sticky start-0 z-10 border-e border-e-slate-200 text-right text-sm font-medium leading-snug',
                         isWedNight && 'text-amber-900',
                         isFriday && 'text-indigo-900'
                       )}
                     >
                       {rowLabel}
-                      {isWedNight ? <Star className="ms-1 inline h-4 w-4 text-amber-600" /> : null}
-                      <div className="mt-0.5 font-mono-nums text-xs font-medium text-slate-500 sm:text-sm" dir="ltr">
+                      {isWedNight ? <Star className="ms-0.5 inline h-3 w-3 shrink-0 text-amber-600" /> : null}
+                      <div className="mt-0.5 font-mono-nums text-[11px] font-medium text-slate-500" dir="ltr">
                         {formatDateEn(rowDate)}
                       </div>
                     </td>
                     {cells.map(({ att, absent }, i) => (
                       <td
                         key={employees[i].id}
-                        className={cn(tableRowCell(zebra), 'text-center font-mono-nums text-sm sm:text-[15px]')}
+                        className={cn(tableRowCell(zebra), 'min-w-0 text-center font-mono-nums text-xs')}
                       >
                         {att?.daily_wage != null ? (
                           <span className={numNeutral}>{roundDisplay(att.daily_wage)}</span>
                         ) : absent ? (
                           <span
-                            className="inline-block min-h-[1.35rem] min-w-[3rem] rounded-md bg-red-50 px-2 py-1 align-middle ring-1 ring-inset ring-red-100 sm:min-h-[1.5rem]"
+                            className="inline-block min-h-[1.2rem] min-w-[2.5rem] rounded-md bg-red-50/90 px-1.5 py-0.5 align-middle ring-1 ring-inset ring-red-100/80"
                             aria-label="غياب"
                           />
                         ) : (
@@ -278,7 +287,7 @@ export function Dashboard() {
                       className={cn(
                         tableRowCell(zebra),
                         tableCellLast,
-                        'text-center font-mono-nums text-sm font-bold text-slate-900 sm:text-[15px]'
+                        'text-center font-mono-nums text-xs font-semibold text-slate-900'
                       )}
                     >
                       {daySum > 0 ? roundDisplay(daySum) : '—'}
@@ -289,7 +298,9 @@ export function Dashboard() {
               <tr className={tableTotalRow}>
                 <td
                   className={cn(
-                    tableTotalCell('sticky start-0 z-10 border-e-2 border-e-slate-400/60 py-4 text-right text-base')
+                    tableTotalCell(
+                      'sticky start-0 z-10 border-e border-e-slate-300 py-2 text-right text-sm'
+                    )
                   )}
                 >
                   مجموع الأسبوع
@@ -301,7 +312,7 @@ export function Dashboard() {
                   return (
                     <td
                       key={e.id}
-                      className={cn(tableTotalCell('text-center font-mono-nums text-[15px]'))}
+                      className={cn(tableTotalCell('text-center font-mono-nums text-xs'))}
                     >
                       {roundDisplay(sum)}
                     </td>
@@ -309,7 +320,7 @@ export function Dashboard() {
                 })}
                 <td
                   className={cn(
-                    tableTotalCell('text-center font-mono-nums text-base'),
+                    tableTotalCell('text-center font-mono-nums text-sm'),
                     tableCellLast
                   )}
                 >
@@ -354,20 +365,20 @@ export function Dashboard() {
           {employees.length === 0 ? (
             <p className="p-6 text-center text-[var(--color-text-secondary)]">أضف موظفين أولاً لعرض التفاصيل.</p>
           ) : (
-            <table className={tableBaseClass} dir="rtl">
+            <table className={cn(tableBaseClass, 'table-fixed')} dir="rtl">
               <thead>
                 <tr>
-                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-12 max-w-[3rem] px-2 text-center')} />
-                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 min-w-[8rem] text-right')}>
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[7%] text-center')} />
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[31%] min-w-0 text-right')}>
                     الموظف
                   </th>
-                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[15%] text-center font-mono-nums')}>
                     حضور
                   </th>
-                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[15%] text-center font-mono-nums')}>
                     مغادرة
                   </th>
-                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 text-center font-mono-nums')}>
+                  <th className={cn(tableHeadCell, tableHeadSticky, 'z-20 w-[14%] text-center font-mono-nums')}>
                     اليومية
                   </th>
                   <th
@@ -375,7 +386,7 @@ export function Dashboard() {
                       tableHeadCell,
                       tableHeadSticky,
                       tableCellLast,
-                      'z-20 text-center font-mono-nums'
+                      'z-20 w-[18%] text-center font-mono-nums'
                     )}
                   >
                     اليوم
@@ -397,16 +408,22 @@ export function Dashboard() {
                           checked={sel}
                           onChange={() => toggleSel(e.id)}
                           disabled={!att}
-                          className="h-4 w-4 accent-slate-700 disabled:opacity-40"
+                          className="h-3.5 w-3.5 accent-slate-700 disabled:opacity-40"
                         />
                       </td>
-                      <td className={cn(tableRowCell(zebra), 'text-right font-semibold text-slate-900', rowPick)}>
+                      <td
+                        className={cn(
+                          tableRowCell(zebra),
+                          'min-w-0 truncate text-right font-medium text-slate-900',
+                          rowPick
+                        )}
+                      >
                         {e.name}
                       </td>
                       <td
                         className={cn(
                           tableRowCell(zebra),
-                          'text-center font-mono-nums text-sm sm:text-[15px]',
+                          'text-center font-mono-nums text-xs',
                           rowPick
                         )}
                       >
@@ -414,7 +431,7 @@ export function Dashboard() {
                           <span className="text-slate-400">—</span>
                         ) : absent ? (
                           <span
-                            className="inline-block min-h-[1.25rem] min-w-[2.75rem] rounded-md bg-red-50 px-2 py-0.5 align-middle ring-1 ring-inset ring-red-100 sm:text-sm"
+                            className="inline-block min-h-[1.15rem] min-w-[2.35rem] rounded-md bg-red-50/90 px-1.5 py-0.5 align-middle ring-1 ring-inset ring-red-100/80"
                             aria-label="غياب"
                           />
                         ) : (
@@ -424,7 +441,7 @@ export function Dashboard() {
                       <td
                         className={cn(
                           tableRowCell(zebra),
-                          'text-center font-mono-nums text-sm sm:text-[15px]',
+                          'text-center font-mono-nums text-xs',
                           rowPick
                         )}
                       >
@@ -439,7 +456,7 @@ export function Dashboard() {
                       <td
                         className={cn(
                           tableRowCell(zebra),
-                          'text-center font-mono-nums text-sm text-slate-600 sm:text-[15px]',
+                          'text-center font-mono-nums text-xs text-slate-600',
                           rowPick
                         )}
                       >
@@ -455,7 +472,7 @@ export function Dashboard() {
                         className={cn(
                           tableRowCell(zebra),
                           tableCellLast,
-                          'text-center font-mono-nums text-sm font-semibold sm:text-[15px]',
+                          'text-center font-mono-nums text-xs font-semibold',
                           absent ? 'text-red-900' : 'text-slate-900',
                           rowPick
                         )}
