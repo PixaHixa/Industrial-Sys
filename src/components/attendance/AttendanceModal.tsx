@@ -120,10 +120,10 @@ export function AttendanceModal({
       title={`${existingId ? 'تعديل دوام' : 'إضافة دوام'} — ${employee.name}`}
       footer={
         <>
-          <Button variant="secondary" onClick={onClose}>
+          <Button variant="secondary" onClick={onClose} className="w-full sm:w-auto">
             إلغاء
           </Button>
-          <Button onClick={handleSave} disabled={saving}>
+          <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
             حفظ {'\u2713'}
           </Button>
         </>

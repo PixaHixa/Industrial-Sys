@@ -130,6 +130,7 @@ export function AttendancePage() {
             variant="danger"
             disabled={!selectedEmployee}
             onClick={() => setDelWeekOpen(true)}
+            className="min-h-11 w-full justify-center sm:w-auto"
           >
             <Trash2 className="h-4 w-4" /> حذف أسبوع
           </Button>
@@ -139,7 +140,7 @@ export function AttendancePage() {
       <div className="mb-6">
         <label className="mb-2 block text-sm font-semibold text-[var(--color-text-secondary)]">اختر موظف</label>
         <select
-          className="w-full max-w-md rounded-xl border border-[var(--color-border)] bg-app-card px-4 py-3 font-semibold text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/25"
+          className="min-h-11 w-full max-w-full rounded-xl border border-[var(--color-border)] bg-app-card px-4 py-3 font-semibold text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/25 sm:max-w-md"
           value={empId}
           onChange={(e) => setEmpId(e.target.value)}
         >
@@ -161,7 +162,7 @@ export function AttendancePage() {
               <strong className="text-slate-800">تشغيل:</strong> يظهر «إضافة» ليوم الجمعة ويُحسب الغياب كباقي الأيام.
             </p>
           </div>
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex shrink-0 items-center justify-between gap-4 sm:justify-end">
             <span className="text-sm font-medium text-slate-600">
               {fridayAttendanceEnabled ? 'تشغيل' : 'إيقاف'}
             </span>
@@ -172,13 +173,13 @@ export function AttendancePage() {
               aria-label={fridayAttendanceEnabled ? 'إيقاف دوام الجمعة' : 'تشغيل دوام الجمعة'}
               onClick={() => setFridayAttendanceEnabled(!fridayAttendanceEnabled)}
               className={cn(
-                'relative h-8 w-14 shrink-0 rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500',
+                'relative h-10 w-[3.75rem] min-h-11 shrink-0 rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 sm:h-8 sm:min-h-0 sm:w-14',
                 fridayAttendanceEnabled ? 'bg-slate-700' : 'bg-slate-300'
               )}
             >
               <span
                 className={cn(
-                  'absolute top-1 h-6 w-6 rounded-full bg-white shadow-sm transition-all duration-200 ease-out',
+                  'absolute top-1.5 h-7 w-7 rounded-full bg-white shadow-sm transition-all duration-200 ease-out sm:top-1 sm:h-6 sm:w-6',
                   fridayAttendanceEnabled ? 'inset-inline-end-1' : 'inset-inline-start-1'
                 )}
               />

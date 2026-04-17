@@ -11,9 +11,12 @@ export function Layout({ children, weekReference }: LayoutProps) {
   return (
     <div className="flex min-h-screen min-w-0 flex-col bg-app-bg" dir="rtl">
       <Header weekReference={weekReference} />
-      {/* صف باتجاه LTR صراحةً حتى لا يُورّث rtl فيضع الشريط يساراً */}
-      <div className="flex min-h-0 flex-1 flex-row" dir="ltr">
-        <main className="min-w-0 flex-1 overflow-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8 animate-fade-in" dir="rtl">
+      {/* عمود معكوس على الشاشات الصغيرة: الشريط الجانبي يظهر فوق المحتوى؛ على lg يبقى صفاً */}
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col-reverse lg:flex-row" dir="ltr">
+        <main
+          className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto px-3 py-4 sm:px-5 sm:py-6 md:px-6 md:py-8 lg:px-8 animate-fade-in"
+          dir="rtl"
+        >
           {children}
         </main>
         <Sidebar weekStart={weekReference} />

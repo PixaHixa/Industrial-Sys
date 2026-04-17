@@ -21,10 +21,10 @@ export function Sidebar({ weekStart }: SidebarProps) {
 
   return (
     <aside
-      className="flex w-[260px] shrink-0 flex-col border-s border-[var(--color-border)] bg-app-card shadow-sm sm:w-[272px]"
+      className="flex w-full max-w-full shrink-0 flex-col border-t border-[var(--color-border)] bg-app-card shadow-sm lg:w-[min(17rem,100%)] lg:border-s lg:border-t-0"
       dir="rtl"
     >
-      <nav className="flex flex-1 flex-col gap-1 p-4 pt-6 sm:p-5 sm:pt-8">
+      <nav className="flex max-lg:snap-x max-lg:snap-mandatory max-lg:flex-row max-lg:flex-nowrap max-lg:gap-2 max-lg:overflow-x-auto max-lg:overflow-y-hidden max-lg:px-3 max-lg:py-3 max-lg:[scrollbar-width:thin] lg:flex-1 lg:flex-col lg:gap-1 lg:overflow-visible lg:p-5 lg:pt-8">
         {links.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
@@ -32,7 +32,7 @@ export function Sidebar({ weekStart }: SidebarProps) {
             end={end}
             className={({ isActive }) =>
               cn(
-                'flex flex-row-reverse items-center justify-end gap-3 rounded-xl px-4 py-3 text-right text-sm font-semibold transition-colors',
+                'flex shrink-0 flex-row-reverse items-center justify-end gap-3 rounded-xl px-4 py-3 text-right text-sm font-semibold transition-colors touch-manipulation max-lg:min-h-11 max-lg:snap-start max-lg:justify-center',
                 isActive
                   ? 'bg-[var(--color-accent-blue-bg)] text-[var(--color-accent-blue)] shadow-sm'
                   : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-surface)] hover:text-[var(--color-text-primary)]'
@@ -44,7 +44,7 @@ export function Sidebar({ weekStart }: SidebarProps) {
           </NavLink>
         ))}
       </nav>
-      <div className="border-t border-[var(--color-border)] p-4 text-right text-sm text-[var(--color-text-secondary)]">
+      <div className="shrink-0 border-t border-[var(--color-border)] p-3 text-right text-sm text-[var(--color-text-secondary)] sm:p-4">
         <p className="text-xs text-[var(--color-text-muted)]">الأسبوع المعروض</p>
         <p className="mt-1 font-mono-nums font-semibold text-[var(--color-accent-blue)]" dir="ltr">
           {rangeLabel}

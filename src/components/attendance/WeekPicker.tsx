@@ -16,10 +16,13 @@ export function WeekPicker({ value, onChange, className }: WeekPickerProps) {
   const id = useId()
 
   return (
-    <div className={`flex flex-wrap items-center gap-2 ${className ?? ''}`} dir="rtl">
+    <div
+      className={`flex w-full max-w-full flex-wrap items-stretch gap-2 sm:w-auto sm:items-center ${className ?? ''}`}
+      dir="rtl"
+    >
       <button
         type="button"
-        className="rounded-xl border border-[var(--color-border)] bg-app-card p-2.5 text-[var(--color-accent-blue)] shadow-sm transition-colors hover:border-[var(--color-accent-blue)]/40 hover:bg-[var(--color-bg-surface)]"
+        className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border border-[var(--color-border)] bg-app-card p-2.5 text-[var(--color-accent-blue)] shadow-sm transition-colors touch-manipulation hover:border-[var(--color-accent-blue)]/40 hover:bg-[var(--color-bg-surface)]"
         aria-label="الأسبوع السابق"
         onClick={() => onChange(subDays(weekStart, 7))}
       >
@@ -27,7 +30,7 @@ export function WeekPicker({ value, onChange, className }: WeekPickerProps) {
       </button>
       <label
         htmlFor={id}
-        className="flex cursor-pointer items-center gap-2 rounded-xl border border-[var(--color-border)] bg-app-card px-4 py-2.5 text-sm text-[var(--color-text-primary)] shadow-sm transition-colors hover:border-[var(--color-accent-blue)]/35 hover:bg-[var(--color-bg-surface)]"
+        className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[var(--color-border)] bg-app-card px-3 py-2.5 text-sm text-[var(--color-text-primary)] shadow-sm transition-colors hover:border-[var(--color-accent-blue)]/35 hover:bg-[var(--color-bg-surface)] sm:flex-initial sm:px-4"
       >
         <Calendar className="h-4 w-4 text-[var(--color-accent-blue)]" />
         <span className="font-mono-nums font-semibold text-[var(--color-text-primary)]" dir="ltr">
@@ -47,7 +50,7 @@ export function WeekPicker({ value, onChange, className }: WeekPickerProps) {
       </label>
       <button
         type="button"
-        className="rounded-xl border border-[var(--color-border)] bg-app-card p-2.5 text-[var(--color-accent-blue)] shadow-sm transition-colors hover:border-[var(--color-accent-blue)]/40 hover:bg-[var(--color-bg-surface)]"
+        className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border border-[var(--color-border)] bg-app-card p-2.5 text-[var(--color-accent-blue)] shadow-sm transition-colors touch-manipulation hover:border-[var(--color-accent-blue)]/40 hover:bg-[var(--color-bg-surface)]"
         aria-label="الأسبوع التالي"
         onClick={() => onChange(addDays(weekStart, 7))}
       >

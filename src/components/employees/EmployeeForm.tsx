@@ -12,7 +12,7 @@ type EmployeeFormProps = {
 }
 
 const fieldClass =
-  'w-full rounded-xl border border-[var(--color-border)] bg-app-card px-4 py-3 text-[var(--color-text-primary)] shadow-sm outline-none transition-colors placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-blue)]/25'
+  'min-h-11 w-full rounded-xl border border-[var(--color-border)] bg-app-card px-4 py-3 text-[var(--color-text-primary)] shadow-sm outline-none transition-colors placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-blue)]/25'
 
 export function EmployeeForm({ editing, existingIds, onDone }: EmployeeFormProps) {
   const toast = useToast()

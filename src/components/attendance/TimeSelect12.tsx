@@ -20,9 +20,9 @@ export function TimeSelect12({ value24, onChange, label }: TimeSelect12Props) {
   return (
     <div className="space-y-2">
       <label className="text-sm font-semibold text-[var(--color-text-secondary)]">{label}</label>
-      <div className="flex flex-wrap items-center gap-2" dir="ltr">
+      <div className="flex w-full flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center" dir="ltr">
         <select
-          className="rounded-xl border border-[var(--color-border)] bg-app-card px-3 py-2 text-sm font-mono-nums text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/20"
+          className="min-h-11 w-full rounded-xl border border-[var(--color-border)] bg-app-card px-3 py-2 text-sm font-mono-nums text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/20 sm:w-auto sm:min-w-[4.5rem]"
           value={hour12}
           onChange={(e) => set(Number(e.target.value), minute, period)}
         >
@@ -32,9 +32,9 @@ export function TimeSelect12({ value24, onChange, label }: TimeSelect12Props) {
             </option>
           ))}
         </select>
-        <span className="text-[var(--color-text-muted)]">:</span>
+        <span className="hidden text-center text-[var(--color-text-muted)] sm:inline">:</span>
         <select
-          className="rounded-xl border border-[var(--color-border)] bg-app-card px-3 py-2 text-sm font-mono-nums text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/20"
+          className="min-h-11 w-full rounded-xl border border-[var(--color-border)] bg-app-card px-3 py-2 text-sm font-mono-nums text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/20 sm:w-auto sm:min-w-[4.5rem]"
           value={minute}
           onChange={(e) => set(hour12, Number(e.target.value), period)}
         >
@@ -45,7 +45,7 @@ export function TimeSelect12({ value24, onChange, label }: TimeSelect12Props) {
           ))}
         </select>
         <select
-          className="rounded-xl border border-[var(--color-border)] bg-app-card px-3 py-2 text-sm font-mono-nums text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/20"
+          className="min-h-11 w-full rounded-xl border border-[var(--color-border)] bg-app-card px-3 py-2 text-sm font-mono-nums text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/20 sm:w-auto sm:min-w-[5rem]"
           value={period}
           onChange={(e) => set(hour12, minute, e.target.value as 'AM' | 'PM')}
         >

@@ -138,7 +138,7 @@ export function AttendanceTable({
                             <Button
                               size="sm"
                               variant="secondary"
-                              className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                              className="min-h-11 gap-1 rounded-md px-3 py-2 text-xs sm:h-9 sm:min-h-9 sm:px-2 sm:py-1"
                               onClick={() => onEdit(rowLabel, rowDate, att)}
                             >
                               <Pencil className="h-3 w-3 shrink-0" /> تعديل
@@ -146,7 +146,7 @@ export function AttendanceTable({
                             <Button
                               size="sm"
                               variant="danger"
-                              className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                              className="min-h-11 gap-1 rounded-md px-3 py-2 text-xs sm:h-9 sm:min-h-9 sm:px-2 sm:py-1"
                               onClick={() => onDeleteRow(att)}
                             >
                               <Trash2 className="h-3 w-3 shrink-0" /> حذف
@@ -156,7 +156,7 @@ export function AttendanceTable({
                           <Button
                             size="sm"
                             variant="danger"
-                            className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                            className="min-h-11 gap-1 rounded-md px-3 py-2 text-xs sm:h-9 sm:min-h-9 sm:px-2 sm:py-1"
                             onClick={() => onDeleteRow(att)}
                           >
                             <Trash2 className="h-3 w-3 shrink-0" /> حذف
@@ -167,7 +167,7 @@ export function AttendanceTable({
                       <Button
                         size="sm"
                         variant="primary"
-                        className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                        className="min-h-11 gap-1 rounded-md px-3 py-2 text-xs sm:h-9 sm:min-h-9 sm:px-2 sm:py-1"
                         onClick={() => onAdd(rowLabel, rowDate)}
                       >
                         <Plus className="h-3 w-3 shrink-0" /> إضافة

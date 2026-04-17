@@ -61,7 +61,7 @@ export function EmployeesPage() {
 
   return (
     <Layout weekReference={getWeekStart(new Date())}>
-      <div className="mx-auto max-w-[1600px]">
+      <div className="mx-auto w-full max-w-[min(100rem,100%)]">
         <h2 className="mb-6 text-right text-2xl font-bold tracking-tight text-[var(--color-text-primary)] sm:mb-8">
           الموظفون
         </h2>

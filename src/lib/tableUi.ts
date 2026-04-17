@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils'
 
-/** غلاف الجدول */
+/** غلاف الجدول — تمرير أفقي آمن على الجوال دون كسر التصميم */
 export const tableShellClass =
-  'overflow-x-auto rounded-xl border border-slate-300/90 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]'
+  'max-w-full overflow-x-auto overscroll-x-contain rounded-xl border border-slate-300/90 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)] [-webkit-overflow-scrolling:touch]'
 
 export const tableBaseClass =
   'w-full border-collapse text-sm leading-snug text-slate-900 [font-feature-settings:normal]'

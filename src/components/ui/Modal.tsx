@@ -15,33 +15,37 @@ type ModalProps = {
 export function Modal({ open, onClose, title, children, footer, className }: ModalProps) {
   if (!open) return null
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" dir="rtl">
+    <div className="fixed inset-0 z-[100] flex items-end justify-center overflow-y-auto p-0 sm:items-center sm:p-4" dir="rtl">
       <button
         type="button"
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"
+        className="absolute inset-0 min-h-[100dvh] bg-slate-900/40 backdrop-blur-[2px]"
         aria-label="إغلاق"
         onClick={onClose}
       />
       <div
         className={cn(
-          'relative z-10 w-full max-w-lg rounded-2xl border border-[var(--color-border)] bg-app-card p-6 shadow-lg animate-fade-in',
+          'relative z-10 m-0 w-full max-w-lg rounded-t-2xl border border-[var(--color-border)] bg-app-card p-4 shadow-lg animate-fade-in max-h-[min(90dvh,100%)] overflow-y-auto sm:m-auto sm:rounded-2xl sm:p-6',
           className
         )}
         role="dialog"
         aria-modal="true"
       >
         <div className="mb-4 flex items-start justify-between gap-4">
-          <h2 className="text-lg font-bold text-[var(--color-accent-blue)]">{title}</h2>
+          <h2 className="min-w-0 flex-1 text-lg font-bold text-[var(--color-accent-blue)]">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-bg-surface)] hover:text-[var(--color-text-primary)]"
+            className="-m-1 inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg p-1 text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-bg-surface)] hover:text-[var(--color-text-primary)]"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
         <div className="text-[var(--color-text-primary)]">{children}</div>
-        {footer ? <div className="mt-6 flex flex-wrap justify-end gap-3">{footer}</div> : null}
+        {footer ? (
+          <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:justify-end">
+            {footer}
+          </div>
+        ) : null}
       </div>
     </div>
   )
@@ -75,11 +79,12 @@ export function ConfirmModal({
       title={title}
       footer={
         <>
-          <Button variant="secondary" onClick={onClose}>
+          <Button variant="secondary" onClick={onClose} className="w-full sm:w-auto">
             {cancelLabel}
           </Button>
           <Button
             variant={danger ? 'danger' : 'primary'}
+            className="w-full sm:w-auto"
             onClick={() => {
               void (async () => {
                 try {

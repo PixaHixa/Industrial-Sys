@@ -42,7 +42,7 @@ export function EmployeeTable({ employees, loading, onEdit, onDeleteRequest }: E
   }
 
   return (
-    <div className={cn(tableShellClass, 'overflow-hidden')}>
+    <div className={tableShellClass}>
       <table className={cn(tableBaseClass, 'table-fixed')} dir="rtl">
         <thead>
           <tr>
@@ -97,7 +97,7 @@ export function EmployeeTable({ employees, loading, onEdit, onDeleteRequest }: E
                     <Button
                       size="sm"
                       variant="secondary"
-                      className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                      className="min-h-11 gap-1 rounded-md px-3 py-2 text-xs sm:h-9 sm:min-h-9 sm:px-2 sm:py-1"
                       onClick={() => onEdit(e)}
                     >
                       <Pencil className="h-3 w-3 shrink-0" /> تعديل
@@ -105,7 +105,7 @@ export function EmployeeTable({ employees, loading, onEdit, onDeleteRequest }: E
                     <Button
                       size="sm"
                       variant="danger"
-                      className="h-7 gap-1 rounded-md px-2 py-1 text-xs"
+                      className="min-h-11 gap-1 rounded-md px-3 py-2 text-xs sm:h-9 sm:min-h-9 sm:px-2 sm:py-1"
                       onClick={() => onDeleteRequest(e)}
                     >
                       <Trash2 className="h-3 w-3 shrink-0" /> حذف

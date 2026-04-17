@@ -86,7 +86,7 @@ export function ReportTable({ weekStart, employees, attendance, loading }: Repor
         </div>
       </div>
 
-      <div className={cn(tableShellClass, 'overflow-hidden')}>
+      <div className={tableShellClass}>
         <table className={cn(tableBaseClass, 'table-fixed min-w-[1040px]')} dir="rtl">
           <thead>
             <tr>

@@ -341,7 +341,7 @@ export function Dashboard() {
           <input
             type="date"
             lang="en"
-            className="rounded-xl border border-[var(--color-border)] bg-app-card px-3 py-2.5 font-mono-nums text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/25"
+            className="min-h-11 w-full max-w-full rounded-xl border border-[var(--color-border)] bg-app-card px-3 py-2.5 font-mono-nums text-[var(--color-text-primary)] shadow-sm outline-none transition-colors focus:border-[var(--color-accent-blue)] focus:ring-2 focus:ring-[var(--color-accent-blue)]/25 sm:w-auto sm:max-w-none"
             dir="ltr"
             value={toYmd(detailDay)}
             min={toYmd(weekStart)}
@@ -361,7 +361,7 @@ export function Dashboard() {
             }}
           />
         </div>
-        <div className={cn(tableShellClass, 'overflow-hidden')}>
+        <div className={tableShellClass}>
           {employees.length === 0 ? (
             <p className="p-6 text-center text-[var(--color-text-secondary)]">أضف موظفين أولاً لعرض التفاصيل.</p>
           ) : (
